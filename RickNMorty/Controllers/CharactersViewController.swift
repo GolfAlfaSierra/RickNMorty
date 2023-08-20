@@ -14,42 +14,36 @@ private enum Constants {
 
 final class CharactersViewController: UIViewController {
     private let dataSource = CharactersCollectionViewDataSource()
-    private var collectionView: UICollectionView! = nil
-    private var collectionViewLayout: UICollectionViewFlowLayout! = nil
+    private lazy var charactersCollectionView = CharactersCollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+    private lazy var collectionViewLayout = CharactersCollectionViewFlowLayout()
+    private let networkManager = NetworkManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+
+        networkManager.requestData { [weak self] data in
+            self?.dataSource.characters = data
+            self?.charactersCollectionView.reloadData()
+        }
     }
 }
 
 private extension CharactersViewController {
     func setupCollectionView() {
-        let layout = CharactersCollectionViewFlowLayout()
-        collectionViewLayout = layout
-
-        let collectionView = CharactersCollectionView(frame: .zero, collectionViewLayout: layout)
-        self.collectionView = collectionView
-
-        collectionView.dataSource = dataSource
-        collectionView.register(CharacterCardCell.self, forCellWithReuseIdentifier: CharacterCardCell.reuseID)
-        collectionView.register(CharactersHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CharactersHeaderView.reuseID)
-
-        view = collectionView
+        charactersCollectionView.dataSource = dataSource
+        registerCells()
+        view = charactersCollectionView
     }
+
+    func registerCells() {
+        charactersCollectionView.register(CharacterCardCell.self,
+                                          forCellWithReuseIdentifier: CharacterCardCell.reuseID)
+        charactersCollectionView.register(CharactersHeaderView.self,
+                                          forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                          withReuseIdentifier: CharactersHeaderView.reuseID)
+    }
+
+    
 }
 
-private final class CharactersCollectionViewDataSource: NSObject, UICollectionViewDataSource {
-    func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
-        100
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCardCell.reuseID, for: indexPath) as! CharacterCardCell
-    }
-
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind _: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CharactersHeaderView.reuseID, for: indexPath)
-        return headerView
-    }
-}
