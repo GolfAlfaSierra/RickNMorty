@@ -52,6 +52,8 @@ final class CharacterDetailViewController: UIViewController {
         super.viewDidLoad()
         setupTableView()
         
+        
+        
         characterDetailHeaderView.updateState(image: avatarImage, name: name, status: status.rawValue)
         dataSource.characterModel.characterInfo.species = species
         dataSource.characterModel.characterInfo.type = type
@@ -73,16 +75,12 @@ final class CharacterDetailViewController: UIViewController {
             }
         }
         
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
         UIView.animate(withDuration: 1 / 3, animations: {
             self.tableView.tableHeaderView = self.tableView.tableHeaderView
             self.tableView.alpha = 1
             self.tableView.layoutIfNeeded()
         })
+        
     }
 }
 
