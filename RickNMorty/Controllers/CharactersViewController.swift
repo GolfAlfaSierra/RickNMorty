@@ -22,7 +22,7 @@ final class CharactersViewController: UIViewController {
         super.viewDidLoad()
         setupCollectionView()
 
-        networkManager.requestData { [weak self] data in
+        networkManager.fetchCharactersData { [weak self] data in
             self?.dataSource.characters = data
             self?.charactersCollectionView.reloadData()
         }
@@ -48,8 +48,28 @@ private extension CharactersViewController {
 
 extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let vc = CharacterDetailViewController()
-
+        let cell = collectionView.cellForItem(at: indexPath) as! CharacterCardCell
+        guard let selectedCharacter = dataSource.characters?.results[indexPath.row] else {return}
+        let name = selectedCharacter.name
+        let status = selectedCharacter.status
+        let species = selectedCharacter.species.rawValue
+        let type = selectedCharacter.type
+        let gender = selectedCharacter.gender
+        
+        let urlstring = selectedCharacter.location.url
+        
+        
+        
+        let vc = CharacterDetailViewController(avatarImage: cell.imageView.image!,
+                                               name: name,
+                                               status: status,
+                                               species: species,
+                                               type: type,
+                                               gender: gender,
+                                               locationURL: urlstring,
+                                               episodeURLs: selectedCharacter.episode
+        )
+        
         present(vc, animated: true)
     }
 }

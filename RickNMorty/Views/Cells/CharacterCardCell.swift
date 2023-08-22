@@ -20,7 +20,7 @@ final class CharacterCardCell: UICollectionViewCell {
         return imageView
     }()
 
-    let textLabel: UILabel = {
+    let nameLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
         label.text = "TEST"
@@ -40,21 +40,21 @@ final class CharacterCardCell: UICollectionViewCell {
         layer.cornerRadius = 16
 
         contentView.addSubview(imageView)
-        contentView.addSubview(textLabel)
+        contentView.addSubview(nameLabel)
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalToSystemSpacingAfter: contentView.leadingAnchor, multiplier: 1),
             contentView.trailingAnchor.constraint(equalToSystemSpacingAfter: imageView.trailingAnchor, multiplier: 1),
             imageView.topAnchor.constraint(equalToSystemSpacingBelow: contentView.topAnchor, multiplier: 1),
 
-            textLabel.topAnchor.constraint(equalToSystemSpacingBelow: imageView.bottomAnchor, multiplier: 2),
-            contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: textLabel.bottomAnchor, multiplier: 2),
+            nameLabel.topAnchor.constraint(equalToSystemSpacingBelow: imageView.bottomAnchor, multiplier: 2),
+            contentView.bottomAnchor.constraint(equalToSystemSpacingBelow: nameLabel.bottomAnchor, multiplier: 2),
 
-            textLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            textLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9 )
+            nameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nameLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9 )
         ])
     }
 

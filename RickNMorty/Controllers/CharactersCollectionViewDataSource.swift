@@ -8,7 +8,7 @@
 import UIKit
 
 final class CharactersCollectionViewDataSource: NSObject, UICollectionViewDataSource {
-    var characters: RickNMorty?
+    var characters: RickNMortyCharacterResponse?
     let networkManager = NetworkManager()
 
     func collectionView(_: UICollectionView, numberOfItemsInSection _: Int) -> Int {
@@ -20,7 +20,7 @@ final class CharactersCollectionViewDataSource: NSObject, UICollectionViewDataSo
 
         let name = characters?.results[indexPath.row].name
 
-        cell.textLabel.text = name
+        cell.nameLabel.text = name
 
         if let imageURL = characters?.results[indexPath.row].image, let url = URL(string: imageURL) {
             networkManager.loadImage(with: url) { image in

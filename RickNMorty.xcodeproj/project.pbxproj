@@ -74,11 +74,10 @@
 		6E510B6A2A9168FC00453767 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6E510B752A93846E00453767 /* CharacterCardImageView.swift */,
 				6E510B7B2A94005B00453767 /* Cells */,
 				6E510B642A91638A00453767 /* CharactersCollectionView.swift */,
-				6E510B682A9165FC00453767 /* CharactersHeaderView.swift */,
 				6E510B6C2A916AC300453767 /* CharactersCollectionViewFlowLayout.swift */,
-				6E510B752A93846E00453767 /* CharacterCardImageView.swift */,
 				6E510B7E2A9400C800453767 /* CharacterDetailTableView.swift */,
 			);
 			path = Views;
@@ -112,6 +111,7 @@
 		6E510B7B2A94005B00453767 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				6E510B682A9165FC00453767 /* CharactersHeaderView.swift */,
 				6E510B622A915EFC00453767 /* CharacterCardCell.swift */,
 				6E510B7C2A94007D00453767 /* EpisodesTableViewCell.swift */,
 				6E510B802A94024D00453767 /* CharacterDetailHeaderView.swift */,

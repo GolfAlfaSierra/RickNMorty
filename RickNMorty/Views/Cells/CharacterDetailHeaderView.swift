@@ -10,20 +10,20 @@ import UIKit
 final class CharacterDetailHeaderView: UIView {
     var isConstraintSet = false
 
-    let imageView: CharacterCardImageView = {
+    private let imageView: CharacterCardImageView = {
         let imageView = CharacterCardImageView(frame: .zero)
         imageView.layer.cornerRadius = 16
 
         return imageView
     }()
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = AppFonts.gilroyBold?.withSize(22)
 
         return label
     }()
-    let statusLabel: UILabel = {
+    private let statusLabel: UILabel = {
         let label = UILabel()
         label.textColor = AppColors.appGreenColor
         label.font = AppFonts.gilroyMedium?.withSize(16)
@@ -63,6 +63,12 @@ final class CharacterDetailHeaderView: UIView {
             ])
             isConstraintSet = false
         }
+    }
+    
+    func updateState(image: UIImage?, name: String, status: String) {
+        imageView.image = image
+        nameLabel.text = name
+        statusLabel.text = status
     }
 
     private func configureUI() {

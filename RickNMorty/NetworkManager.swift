@@ -7,12 +7,11 @@
 
 import UIKit.UIImage
 
-// URL https://rickandmortyapi.com/api/character
-
 final class NetworkManager {
     static let charactersURL = URL(string: "https://rickandmortyapi.com/api/character")!
+    static let locationURL = URL(string: "https://rickandmortyapi.com/api/location")!
 
-    func requestCharacters(from url: URL = charactersURL, completion: @escaping (Swift.Result<Data, Error>) -> Void) {
+    private func fetchCharacters(from url: URL = charactersURL, completion: @escaping (Swift.Result<Data, Error>) -> Void) {
         URLSession.shared.dataTask(with: Self.charactersURL) {data, _, error in
             if let error {
                 completion(.failure(error))
@@ -40,11 +39,42 @@ final class NetworkManager {
         }.resume()
     }
 
-    func requestData(completion: @escaping (RickNMorty?) -> Void) {
-        requestCharacters { result in
+    // URL example https://rickandmortyapi.com/api/episode/1
+    func fetchEpisodeData(urlString: String, completion: @escaping (EpisodeResponse) -> Void) {
+        let episodeUrl = URL(string: urlString)!
+
+        URLSession.shared.dataTask(with: episodeUrl) { data, _, _ in
+            guard let data,
+                  let json = try? JSONDecoder().decode(EpisodeResponse.self, from: data)
+            else {return}
+
+            DispatchQueue.main.async {
+                completion(json)
+            }
+        }.resume()
+    }
+
+    // URL example https://rickandmortyapi.com/api/location/1
+    func fetchLocationData(urlString: String, completion: @escaping (LocationRepsonse) -> Void) {
+        let locationUrl = URL(string: urlString)!
+
+        URLSession.shared.dataTask(with: locationUrl) { data, _, _ in
+            guard let data,
+                  let json = try? JSONDecoder().decode(LocationRepsonse.self, from: data)
+            else {return}
+
+            DispatchQueue.main.async {
+                completion(json)
+            }
+        }.resume()
+    }
+
+    // URL https://rickandmortyapi.com/api/character
+    func fetchCharactersData(completion: @escaping (RickNMortyCharacterResponse?) -> Void) {
+        fetchCharacters { result in
             switch result {
             case .success(let data):
-                let data = try? JSONDecoder().decode(RickNMorty.self, from: data)
+                let data = try? JSONDecoder().decode(RickNMortyCharacterResponse.self, from: data)
                 DispatchQueue.main.async {
                     completion(data)
                 }
@@ -62,7 +92,7 @@ final class NetworkManager {
 //   let rickNMorty = try? JSONDecoder().decode(RickNMorty.self, from: jsonData)
 
 // MARK: - RickNMorty
-struct RickNMorty: Codable {
+struct RickNMortyCharacterResponse: Codable {
     var info: Info
     var results: [Result]
 }
@@ -110,6 +140,26 @@ enum Status: String, Codable {
     case alive = "Alive"
     case dead = "Dead"
     case unknown = "unknown"
+}
+
+struct LocationRepsonse: Codable {
+    var id: Int
+    var type: String
+    var name: String
+}
+
+struct EpisodeResponse: Codable {
+    var id: Int
+    var name: String
+    var airDate: String
+    var episode: String
+    
+enum CodingKeys:String, CodingKey {
+    case id
+    case name
+    case airDate = "air_date"
+    case episode
+}
 }
 
 // MARK: - Encode/decode helpers

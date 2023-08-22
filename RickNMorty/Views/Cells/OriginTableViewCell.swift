@@ -12,6 +12,8 @@ final class OriginTableViewCell: UITableViewCell {
 
     let typeImage: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = UIImage(named: "Planet")
+        imageView.contentMode = .center
 
         imageView.backgroundColor = AppColors.appOriginIconBackground
         imageView.layer.cornerRadius = 10
@@ -21,7 +23,7 @@ final class OriginTableViewCell: UITableViewCell {
     let nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = AppFonts.gilroyMedium?.withSize(16)
+        label.font = AppFonts.gilroySemiBold?.withSize(17)
 
         label.text = "Name: None"
 
@@ -30,8 +32,8 @@ final class OriginTableViewCell: UITableViewCell {
 
     let typeLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .white
-        label.font = AppFonts.gilroyMedium?.withSize(16)
+        label.textColor = AppColors.appGreenColor
+        label.font = AppFonts.gilroyMedium?.withSize(13)
 
         label.text = "Type: None"
 
