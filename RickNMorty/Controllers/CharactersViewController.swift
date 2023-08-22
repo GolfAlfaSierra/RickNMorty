@@ -21,6 +21,8 @@ final class CharactersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        
+        title = ""
 
         networkManager.fetchCharactersData { [weak self] data in
             self?.dataSource.characters = data
@@ -70,6 +72,8 @@ extension CharactersViewController: UICollectionViewDelegate {
                                                episodeURLs: selectedCharacter.episode
         )
         
-        present(vc, animated: true)
+        
+        
+        navigationController!.pushViewController(vc, animated: true)
     }
 }

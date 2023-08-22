@@ -14,8 +14,13 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
         let rootVC = CharactersViewController()
+        let nav = UINavigationController(rootViewController: rootVC)
+        
+        UINavigationBar.appearance().tintColor = .white
+        
+        
         self.window = window
-        window.rootViewController = rootVC
+        window.rootViewController = nav
         window.makeKeyAndVisible()
     }
 }
