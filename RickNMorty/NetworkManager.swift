@@ -11,14 +11,14 @@ import UIKit.UIImage
 
 final class NetworkManager {
     static let charactersURL = URL(string: "https://rickandmortyapi.com/api/character")!
-    
+
     func requestCharacters(from url: URL = charactersURL, completion: @escaping (Swift.Result<Data, Error>) -> Void) {
         URLSession.shared.dataTask(with: Self.charactersURL) {data, _, error in
             if let error {
                 completion(.failure(error))
                 return
             }
-            
+
             guard let data else {
                 let emptyDataError = NSError(domain: "YourAppErrorDomain", code: 0, userInfo: nil)
                 completion(.failure(emptyDataError))
@@ -39,7 +39,7 @@ final class NetworkManager {
             }
         }.resume()
     }
-    
+
     func requestData(completion: @escaping (RickNMorty?) -> Void) {
         requestCharacters { result in
             switch result {
@@ -54,7 +54,6 @@ final class NetworkManager {
             }
         }
     }
-
 }
 
 // This file was generated from JSON Schema using quicktype, do not modify it directly.

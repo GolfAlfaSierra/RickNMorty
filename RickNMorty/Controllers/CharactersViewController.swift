@@ -32,6 +32,7 @@ final class CharactersViewController: UIViewController {
 private extension CharactersViewController {
     func setupCollectionView() {
         charactersCollectionView.dataSource = dataSource
+        charactersCollectionView.delegate = self
         registerCells()
         view = charactersCollectionView
     }
@@ -43,7 +44,12 @@ private extension CharactersViewController {
                                           forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                           withReuseIdentifier: CharactersHeaderView.reuseID)
     }
-
-    
 }
 
+extension CharactersViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = CharacterDetailViewController()
+
+        present(vc, animated: true)
+    }
+}

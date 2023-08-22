@@ -35,4 +35,3 @@ final class CharactersCollectionViewDataSource: NSObject, UICollectionViewDataSo
         collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CharactersHeaderView.reuseID, for: indexPath)
     }
 }
-
