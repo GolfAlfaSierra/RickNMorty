@@ -2,7 +2,7 @@
 //  CharacterDetailViewControllerDataSource.swift
 //  RickNMorty
 //
-//  Created by artyom s on 21.08.2023.
+//  Created by Artyom S on 21.08.2023.
 //
 
 import UIKit
@@ -12,10 +12,12 @@ struct CharacterDetailInfoModel {
     var type: String = ""
     var gender: String = ""
 }
+
 struct CharacterDetailOriginModel {
     var name: String = ""
     var type: String = ""
 }
+
 struct CharacterDetailEpisodeModel {
     var name: String
     var airDate: String
@@ -30,9 +32,10 @@ struct CharacterDetailModel {
 
 final class CharacterDetailViewControllerDataSource: NSObject, UITableViewDataSource {
     private let sectionHeaderTitles = ["Info", "Origin", "Episodes"]
-    private let infoParamenterTitles = ["Species", "Type", "Gender"]
+    private let infoParameterTitles = ["Species", "Type", "Gender"]
     private var infoParameterValues = [String]()
-    var characterModel: CharacterDetailModel = CharacterDetailModel() {
+
+    var characterModel = CharacterDetailModel() {
         didSet {
             infoParameterValues = [
                 characterModel.characterInfo.species,
@@ -47,11 +50,12 @@ final class CharacterDetailViewControllerDataSource: NSObject, UITableViewDataSo
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 { return infoParamenterTitles.count}
-        if section == 1 {return 1}
-        if section == 2 {return characterModel.characterEpisodes.count}
-
-        return 1
+        switch section {
+        case 0: return infoParameterTitles.count
+        case 1: return 1
+        case 2: return characterModel.characterEpisodes.count
+        default: return 1
+        }
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -59,35 +63,57 @@ final class CharacterDetailViewControllerDataSource: NSObject, UITableViewDataSo
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        enum SectionTypes: Int {
-            case info, origin, episodes
+        guard let sectionType = SectionTypes(rawValue: indexPath.section) else {
+            return UITableViewCell()
         }
-        var cellToReturn = ""
 
-        let type: SectionTypes = .init(rawValue: indexPath.section)!
-
-        switch type {
+        switch sectionType {
         case .info:
-            cellToReturn = InfoTableViewCell.reuseID
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellToReturn, for: indexPath) as! InfoTableViewCell
-            cell.parameterLabel.text = "\(infoParamenterTitles[indexPath.row]): "
-            cell.valueLabel.text = "\(infoParameterValues[indexPath.row])"
+            let cell = tableView.dequeueReusableCell(withIdentifier: InfoTableViewCell.reuseID, for: indexPath) as! InfoTableViewCell
+            cell.parameterLabel.text = "\(infoParameterTitles[indexPath.row]):"
+            cell.valueLabel.text = infoParameterValues[indexPath.row]
             return cell
 
         case .origin:
-            cellToReturn = OriginTableViewCell.reuseID
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellToReturn, for: indexPath) as! OriginTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: OriginTableViewCell.reuseID, for: indexPath) as! OriginTableViewCell
             cell.nameLabel.text = characterModel.characterOrigin.name
             cell.typeLabel.text = characterModel.characterOrigin.type
             return cell
-            
+
         case .episodes:
-            cellToReturn = EpisodesTableViewCell.reuseID
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellToReturn, for: indexPath) as! EpisodesTableViewCell
-            cell.episodeNameLabel.text = characterModel.characterEpisodes[indexPath.row].name
-            cell.episodeNumberLabel.text = characterModel.characterEpisodes[indexPath.row].episode
-            cell.releaseDateLabel.text = characterModel.characterEpisodes[indexPath.row].airDate
+            let cell = tableView.dequeueReusableCell(withIdentifier: EpisodesTableViewCell.reuseID, for: indexPath) as! EpisodesTableViewCell
+            let episode = characterModel.characterEpisodes[indexPath.row]
+            cell.episodeNameLabel.text = episode.name
+            
+            let numbers = extractNumbers(from: episode.episode)
+            let se = Int(numbers[0])!
+            let ep = Int(numbers[1])!
+            
+            cell.episodeNumberLabel.text = "Episode: \(ep), Season: \(se)"
+            cell.releaseDateLabel.text = episode.airDate
             return cell
         }
+    }
+}
+
+extension CharacterDetailViewControllerDataSource {
+    enum SectionTypes: Int {
+        case info, origin, episodes
+    }
+}
+
+private func extractNumbers(from input: String) -> [String] {
+    do {
+        let pattern = "[0-9]+"
+        let regex = try NSRegularExpression(pattern: pattern, options: [])
+        let matches = regex.matches(in: input, options: [], range: NSRange(input.startIndex..., in: input))
+        
+        return matches.map {
+            let range = Range($0.range, in: input)!
+            return String(input[range])
+        }
+    } catch {
+        print("Error creating regex: \(error)")
+        return []
     }
 }
